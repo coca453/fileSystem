@@ -10,12 +10,13 @@ var SystemDirectory = /** @class */ (function () {
             parentFolder: null
         };
         this.pwd = function (text, parentFolder) {
+            console.log(text);
             if (parentFolder.currentDirectory.nameDirectory == "root") {
                 text = "/root" + text;
                 return text;
             }
-            text = text + "/" + parentFolder.currentDirectory.nameDirectory;
-            return _this.pwd(text, _this.currentDirectory.parentFolder);
+            text = "/" + parentFolder.currentDirectory.nameDirectory + text;
+            return _this.pwd(text, parentFolder.currentDirectory.parentFolder);
         };
         this.cdPrompt = function (name) {
             var directory = new SystemDirectory(_this.currentDirectory.nameDirectory);
@@ -32,7 +33,7 @@ var SystemDirectory = /** @class */ (function () {
                 _parent.currentDirectory.parentFolder = _this.currentDirectory.parentFolder;
                 return _parent;
             }
-            if (_this.currentDirectory.folder.length == 0) {
+            if (_this.currentDirectory.folder.length < 0) {
                 console.log("Entro");
                 return directory;
             }
@@ -42,6 +43,7 @@ var SystemDirectory = /** @class */ (function () {
                     nextFolder = _this.currentDirectory.folder[index];
                 }
             }
+            console.log(nextFolder);
             return nextFolder;
         };
         this.mkdir = function (name) {
@@ -69,7 +71,6 @@ var SystemDirectory = /** @class */ (function () {
                     text = text + "\n" + Element.currentDirectory.nameDirectory;
                 });
             }
-            console.log(text);
             return text;
         };
         this.currentDirectory.nameDirectory = name;
@@ -86,14 +87,16 @@ var Directorio = /** @class */ (function () {
         }
         if (prompt == "pwd") {
             var text = this.directorio.pwd("", this.directorio);
-            return text;
+            console.log(text);
+            return;
         }
         if (prompt.slice(0, 2) == "cd") {
             this.directorio = this.directorio.cdPrompt(prompt.slice(2, prompt.length).trim());
             return;
         }
         if (prompt.slice(0, 2) == "ls") {
-            return this.directorio.ls();
+            console.log(this.directorio.ls());
+            return;
         }
         if (prompt.slice(0, 5) == "mkdir") {
             this.directorio.mkdir(prompt.slice(6, prompt.length));
@@ -103,7 +106,8 @@ var Directorio = /** @class */ (function () {
             this.directorio.touch(prompt.slice(6, prompt.length));
             return;
         }
-        return "Unrecognized command";
+        console.log("Unrecognized command");
+        return;
     };
     return Directorio;
 }());
@@ -113,5 +117,4 @@ var directorio = new Directorio();
 while (userinput != "quit") {
     userinput = readline.question("");
     userinput = directorio.change(userinput);
-    console.log(userinput);
 }

@@ -19,12 +19,13 @@ class SystemDirectory {
     }
 
     public pwd = (text: string, parentFolder: SystemDirectory) => {
+        console.log(text);
         if (parentFolder.currentDirectory.nameDirectory == "root") {
             text = "/root" + text;
             return text;
         }
-        text = text + "/" + parentFolder.currentDirectory.nameDirectory;
-        return this.pwd(text, this.currentDirectory.parentFolder);
+        text = "/" +parentFolder.currentDirectory.nameDirectory + text;
+        return this.pwd(text, parentFolder.currentDirectory.parentFolder);
     }
 
     public cdPrompt = (name: string) => {
@@ -42,9 +43,8 @@ class SystemDirectory {
             _parent.currentDirectory.parentFolder = this.currentDirectory.parentFolder;
             return _parent;
         }
-        if (this.currentDirectory.folder.length == 0) {
+        if (this.currentDirectory.folder.length < 0) {
             console.log("Entro")
-
             return directory;
         }
         let nextFolder = directory;
@@ -81,7 +81,6 @@ class SystemDirectory {
                 text = text + "\n" + Element.currentDirectory.nameDirectory;
             })
         }
-        console.log(text);
         return text;
     }
 }
@@ -97,14 +96,16 @@ class Directorio {
         }
         if (prompt == "pwd") {
             var text = this.directorio.pwd("", this.directorio);
-            return text;
+            console.log(text);
+            return 
         }
         if (prompt.slice(0, 2) == "cd") {
             this.directorio = this.directorio.cdPrompt(prompt.slice(2, prompt.length).trim());
             return
         }
         if (prompt.slice(0, 2) == "ls") {
-            return this.directorio.ls();
+            console.log(this.directorio.ls());
+            return
         }
         if (prompt.slice(0, 5) == "mkdir") {
             this.directorio.mkdir(prompt.slice(6, prompt.length));
@@ -114,7 +115,8 @@ class Directorio {
             this.directorio.touch(prompt.slice(6, prompt.length));
             return
         }
-        return "Unrecognized command"
+        console.log("Unrecognized command")
+        return 
 
     }
 }
@@ -127,5 +129,4 @@ let directorio = new Directorio();
 while (userinput != "quit") {
     userinput = readline.question("");
     userinput = directorio.change(userinput);
-    console.log(userinput);
 }
